@@ -16,24 +16,30 @@ void CArgWrapper::setName(char *val) {
 	name = val;
 }
 
-bool CArgWrapper::testsetName() {
+bool CTest::testsetName() {
 	char *name = "test.txt";
-	CArgWrapper::setName("test.txt");
-	if (name == CArgWrapper::getName()) {
+	CArgWrapper *wrapper = new CArgWrapper();
+	wrapper->setName("test.txt");
+	if (name == wrapper->getName()) {
+		delete wrapper;
 		return true;
 	}
 	else {
+		delete wrapper;
 		return false;
 	}
 }
 
-bool CArgWrapper::testsetPath() {
+bool CTest::testsetPath() {
 	char *path = "";
-	CArgWrapper::setPath("");
-	if (path == CArgWrapper::getPath()) {
+	CArgWrapper * wrapper = new CArgWrapper();
+	wrapper->setPath("");
+	if (path == wrapper->getPath()) {
+		delete wrapper;
 		return true;
 	}
 	else {
+		delete wrapper;
 		return false;
 	}
 }
@@ -98,7 +104,8 @@ bool CFile::find(ifstream *file, string buff, string word) {
 	return false;
 }
 
-bool CFile::testfind() {
+bool CTest::testfind() {
+	CFile *cfile = new CFile();
 	ifstream *file = new ifstream();
 	file->open("D:\file.txt");
 	char *str = "fall";
@@ -106,7 +113,7 @@ bool CFile::testfind() {
 	string buff;
 	char charbuff[] = "fall";
 	bool has_found = _stricmp(charbuff, str);
-	bool has_found_func = CFile::find(file, buff, strs);
+	bool has_found_func = cfile->find(file, buff, strs);
 	delete file;
 	if (has_found == has_found_func) {
 		return true;
@@ -121,16 +128,15 @@ bool CFile::close(ifstream *file) {
 	return true;	
 }
 
-bool CMain::start_test() {
-	CFile *cfile = new CFile();
-	CArgWrapper *wrapper = new CArgWrapper();
-	if ((cfile->testfind() == true) && (wrapper->testsetName() == true) && (wrapper->testsetPath() == true)) {
+bool CTest::start_test() {
+	CTest *test = new CTest();
+	if ((test->testfind() == true) && (test->testsetName() == true) && (test->testsetPath() == true)) {
 		cout << "All tests were passed." << endl;
-		delete cfile, wrapper;
+		delete test;
 		return true;
 	}
 	else {
-		delete cfile, wrapper;
+		delete test;
 		return false;
 	}
 }
@@ -167,12 +173,13 @@ void CMain::start(int argc, char* argv[]) {
 
 int main(int argc, char* argv[]) {
 	setlocale(LC_ALL, "rus");
+	CTest *test = new CTest();
 	CMain *main = new CMain();
-	if (main->start_test() == true) {
+	if (test->start_test() == true) {
 		main->start(argc, argv);
 	}
 	system("pause");
 	//Non capio, quid est
-	delete main;
+	delete test, main;
 	return 0;
 }
