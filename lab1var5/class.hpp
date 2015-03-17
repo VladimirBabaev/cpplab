@@ -30,3 +30,8 @@ class CMain {
 		bool start_test();
 		void start(int, char*[]);
 };
+
+class CDirectory {
+	private:
+		string path;
+}
